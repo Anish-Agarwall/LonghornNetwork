@@ -36,5 +36,84 @@ public class DataParser {
                 continue;
             }
 
+            if (!line.contains(":")) {
+                continue;
+            }
+
+            int sepIdx = line.indexOf(":");
+            String key = line.substring(0, sepIdx).trim().toLowerCase();
+            String value = line.substring(sepIdx + 1).trim();
+
+            switch (key) {
+
+                case "name":
+                    name = value;
+                    break;
+                case "age":
+                    try {
+                        age = Integer.parseInt(value);
+                    } catch (NumberFormatException ignored) {
+
+                    }
+                    break;
+                case "gender":
+                    gender = value;
+                    break;
+                case "year":
+                    try {
+                        year = Integer.parseInt(value);
+                    } catch (NumberFormatException ignored) {
+
+                    }
+                    break;
+                case "major":
+                    major = value;
+                    break;
+                case "gpa":
+                    try {
+                        gpa = Double.parseDouble(value);
+                    } catch (NumberFormatException ignored) {
+
+                    }
+                    break;
+                case "roommatepreferences":
+
+                case "roommate preferences":
+                    if (!value.isEmpty()) {
+                        for (String pref : value.split(",")) {
+                            String trimmed = pref.trim();
+                            if (!trimmed.isEmpty()) {
+                                roommatePrefs.add(trimmed);
+                            }
+                        }
+                    }
+                    break;
+                case "previousinternships":
+
+                case "previous internships":
+
+                case "internships":
+                    if (!value.isEmpty()) {
+                        for (String intern : value.split(",")) {
+                            String trimmed = intern.trim();
+                            if (!trimmed.isEmpty()) {
+                                internships.add(trimmed);
+                            }
+                        }
+                    }
+                    break;
+            }
+
+
+        }
+
+        // Save last student if file doesn't end with blank line
+        if (name != null) {
+            students.add(new UniversityStudent(name, age, gender, year, major, gpa, roommatePrefs, internships));
+        }
+
+        reader.close();
+        return students;
+
     }
 }
